@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 
 axios.defaults.headers.common["x-api-key"] = "live_WNbTd4xBYEpWQg6tp8WGBnBLhHq5jjgtrklLPOrVOAwnfRgCRejAfalH4e9I5B6t";
 axios.defaults.baseURL = "https://api.thecatapi.com/v1/"
