@@ -1,16 +1,44 @@
-// import axios from "axios";
+import axios from "axios";
 
-axios.defaults.headers.common["x-api-key"] = "live_WNbTd4xBYEpWQg6tp8WGBnBLhHq5jjgtrklLPOrVOAwnfRgCRejAfalH4e9I5B6t";
-axios.defaults.baseURL = "https://api.thecatapi.com/v1/"
+axios.defaults.headers.common["x-api-key"] = "40175066-fc06551b58f265feccdc9509e";
+axios.defaults.baseURL = "https://pixabay.com/api/"
 
-export const fetchBreeds = () => {
-  return axios.get('breeds')
-    .then(response => response.data)
-};
 
-export const fetchCatByBreed = (breedId) => {
-  return axios.get(`images/search?breed_ids=${breedId}`)
-    .then(response => response.data[0])
-};
+// export async function getPicture(arr) {
+//     const resps = arr.map(async item => { 
+//         const resp = await fetch(`https://pixabay.com/api/?key=40175066-fc06551b58f265feccdc9509e&q=${item}&image_type=photo&orientation=horizontal&safesearch=true`)
+//         if (!resp.ok) { 
+//             throw new Error()
+//         }
+//         return resp.json()
+//     })
+//     const data = await Promise.allSettled(resps)
+//     const pictureObj = data.filter(({ status }) => status === "fulfilled").map(({ value }) => value);
+//     console.log(pictureObj);
+//     return pictureObj;
+// }
+
+
+// Функція для виконання HTTP-запиту
+export async function fetchImages(query, page = 1) {
+  const response = await fetch(`https://pixabay.com/api/?key=40175066-fc06551b58f265feccdc9509e&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}`);
+  
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const json = await response.json();
+  
+  if (json.hits.length === 0) {
+    Notiflix.Notify.Failure('Sorry, there are no images matching your search query. Please try again.');
+    return;
+  }
+//console.log(json.hits)
+  return json.hits;
+}
+
+
+
+// https://pixabay.com/api/?key=40175066-fc06551b58f265feccdc9509e&q=${query}&image_type=photo&orientation=horizontal&safesearch=true
 
 

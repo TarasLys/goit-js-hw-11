@@ -1,81 +1,166 @@
-import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
-// import Notiflix from 'notiflix';
-// import SlimSelect from 'slim-select'
+import { fetchImages } from './cat-api.js';
+//import Notiflix from 'notiflix';
+//import SlimSelect from 'slim-select'
 
-const breedSelect = document.querySelector('.breed-select');
-const catInfo = document.querySelector('.cat-info');
-const loader = document.querySelector('.loader');
-const error = document.querySelector('.error');
-const divPicture = document.querySelector(".div-picture");
 
-function toggleLoader(display) {
-  loader.style.display = display;
+// Отримання елементів форми
+const form = document.getElementById('search-form');
+const input = form.elements.searchQuery;
+
+// Отримання елемента галереї
+const gallery = document.querySelector('.gallery');
+const loadMore = document.querySelector(".js-load")
+let currentPage = 1;
+
+// Функція для створення картки зображення
+function createCard(images) {
+
+const markup = images.map((image) => `<div class="photo-card">
+  <img src="${image.largeImageURL}" alt="${image.tags}" loading="lazy" width = "400px"/>
+  <div class="info">
+    <p class="info-item">
+      <b>Likes</b>${image.likes}
+    </p>
+    <p class="info-item">
+      <b>Views</b>${image.views}
+    </p>
+    <p class="info-item">
+      <b>Comments</b>${image.comments}
+    </p>
+    <p class="info-item">
+      <b>Downloads</b>${image.downloads}
+    </p>
+  </div></div>`);
+gallery.insertAdjacentHTML("beforeend", markup.join(""));  
 }
 
-function toggleCanInfo(display) { 
-  catInfo.style.display = display;
+
+loadMore.addEventListener("click", onLoad)
+
+function onLoad() {
+  return currentPage += 1;
 }
 
-toggleLoader('none');
-error.style.display = 'none';
 
-toggleLoader('block');
+// Обробник події сабміту форми
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
 
-fetchBreeds().then(breeds => {
- 
-  toggleLoader('none');
+  // Очищення галереї
+  gallery.innerHTML = '';
 
-  const positionBreeds = breeds.map(breed => {
-    const option = document.createElement('option');
-    option.value = breed.id;
-    option.textContent = breed.name;
-    return option;
+  try {
+    // Виконання HTTP-запиту
     
-  })
-  breedSelect.append(...positionBreeds);
-
-  new SlimSelect({
-    select: '.breed-select',
-  })
-
-})
-  .catch(() => {
   
-    Notiflix.Notify.warning('❌ Oops! Something went wrong! Try reloading the page!', {
-      // position: 'center-top' , 
-    });
-  })
-  .finally(() => {
-    toggleLoader('none');
-  });
-
-
-breedSelect.addEventListener('change', (event) => {
-  toggleCanInfo('none');
-  toggleLoader('block');
-  
-  fetchCatByBreed(event.target.value)
-    .then(cat => {
-      
-      toggleLoader('none');
-      toggleCanInfo('block');
-      
-    divPicture.innerHTML = `
-    <img class="picture" src="${cat.url}" alt="${cat.breeds[0].name}">`
-    catInfo.innerHTML = `
-      <h2 class="title">${cat.breeds[0].name}</h2>
-      <p class="text">${cat.breeds[0].description}</p>
-      <p class="temp"><strong>Temperament:</strong> ${cat.breeds[0].temperament}</p>`;
-  })
+    const images = await fetchImages(input.value, currentPage);
+    createCard(images)
     
-    .catch(() => {
-     
-      Notiflix.Notify.warning('❌ Oops! Something went wrong! Try reloading the page!', {
-  //  position: 'center-top' , 
-});
-    })
-  .finally(() => { 
-    toggleLoader('none');
-  })
+    // Очищення поля вводу
+    // input.value = '';
+    
+    // Переміщення фокусу на поле вводу
+    input.focus();
+    //return images;
+    
+    } catch (error) {
+      console.error(error);
+      Notiflix.Notify.Failure('An error occurred while fetching images. Please try again.');
+    }
 });
 
+
+
+
+
+
+
+
+
+
+
+// import { fetchImages } from './cat-api.js';
+// //import Notiflix from 'notiflix';
+// //import SlimSelect from 'slim-select'
+
+
+// // Отримання елементів форми
+// const form = document.getElementById('search-form');
+// const input = form.elements.searchQuery;
+
+// // Отримання елемента галереї
+// const gallery = document.querySelector('.gallery');
+// const loadMore = document.querySelector(".js-load")
+// let currentPage = 1;
+
+// // Функція для створення картки зображення
+// function createCard(images) {
+
+// const markup = images.map((image) => `<div class="photo-card">
+//   <img src="${image.largeImageURL}" alt="${image.tags}" loading="lazy" width = "400px"/>
+//   <div class="info">
+//     <p class="info-item">
+//       <b>Likes</b>${image.likes}
+//     </p>
+//     <p class="info-item">
+//       <b>Views</b>${image.views}
+//     </p>
+//     <p class="info-item">
+//       <b>Comments</b>${image.comments}
+//     </p>
+//     <p class="info-item">
+//       <b>Downloads</b>${image.downloads}
+//     </p>
+//   </div></div>`).join("");
+// gallery.insertAdjacentHTML("beforeend", markup.join(""));  
+// }
+
+
+// loadMore.addEventListener("click", onLoad)
+
+// function onLoad() {
+//   currentPage += 1;
+//   fetchImages(currentPage)
+//   // try {
+//   //   // Виконання HTTP-запиту
+//   //   const images = await fetchImages(input.value);
+//   //   createCard(images)
+    
+//   // }
+//   // catch (error) {
+//   //     console.error(error);
+//   //     Notiflix.Notify.Failure('An error occurred while fetching images. Please try again.');
+//   //   }
+// }
+
+
+// // Обробник події сабміту форми
+// form.addEventListener('submit', async (event) => {
+//   event.preventDefault();
+
+//   // Очищення галереї
+//   gallery.innerHTML = '';
+
+
+
+//   try {
+//     // Виконання HTTP-запиту
+//     const images = await fetchImages(input.value);
+//     createCard(images)
+    
+//     // Очищення поля вводу
+//     // input.value = '';
+    
+//     // Переміщення фокусу на поле вводу
+//     input.focus();
+//     //return images;
+    
+//     } catch (error) {
+//       console.error(error);
+//       Notiflix.Notify.Failure('An error occurred while fetching images. Please try again.');
+//     }
+// });
+
+// // fetchImages(input.value)
+// //   .then((data) => gallery.insertAdjacentHTML("beforeend", markup))
+// //   .catch((err) => console.log(err));
