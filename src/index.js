@@ -1,5 +1,5 @@
 import { fetchImages } from './cat-api.js';
-//import Notiflix from 'notiflix';
+import Notiflix from 'notiflix';
 //import SlimSelect from 'slim-select'
 
 
@@ -16,7 +16,7 @@ let currentPage = 1;
 function createCard(images) {
 
 const markup = images.map((image) => `<div class="photo-card">
-  <img src="${image.largeImageURL}" alt="${image.tags}" loading="lazy" width = "400px"/>
+  <img src="${image.largeImageURL}" alt="${image.tags}" loading="lazy" width = "350px"/>
   <div class="info">
     <p class="info-item">
       <b>Likes</b>${image.likes}
@@ -51,21 +51,28 @@ form.addEventListener('submit', async (event) => {
 
   try {
     // Виконання HTTP-запиту
-    
+    if (input.value.length === 0) { 
+      Notiflix.Notify.failure('You must enter a request.');
+    return;
+    }
   
     const images = await fetchImages(input.value, currentPage);
     createCard(images)
     
+
+
     // Очищення поля вводу
-    // input.value = '';
+    ///input.value = '';
     
     // Переміщення фокусу на поле вводу
     input.focus();
     //return images;
+
+
     
     } catch (error) {
-      console.error(error);
-      Notiflix.Notify.Failure('An error occurred while fetching images. Please try again.');
+      //console.error(error);
+      Notiflix.Notify.failure('An error occurred while fetching images. Please try again.');
     }
 });
 
