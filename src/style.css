@@ -26,4 +26,45 @@ body {
     flex-direction: column;
     padding-left: 13px;
     padding-right: 13px;
+    
 }
+
+.total-span {
+    font-style: italic;
+    color: rgb(255, 0, 0);
+    margin-left: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    -webkit-text-stroke: 0.1px rgb(217, 198, 198);
+    box-shadow: 15px 15px 25px rgba(0, 0, 0, 0.3);
+}
+
+.load-more {
+    background-color: rgb(255, 4, 4);
+    color: aliceblue;
+    height: 30px;
+    width: 120px;
+    border-radius: 10px;
+    margin-left: 10px;
+    box-shadow: 15px 15px 25px rgba(0, 0, 0, 0.3);
+}
+
+.search-button {
+        background-color: rgb(255, 4, 4);
+        color: aliceblue;
+        height: 30px;
+        width: 120px;
+        border-radius: 10px;
+        margin-left: 10px;
+        box-shadow: 15px 15px 25px rgba(0, 0, 0, 0.3);
+    }
+
+ .text-input {
+    height: 20px;
+        width: 220px;
+        margin-left: 10px;
+        box-shadow: 15px 15px 25px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+ }
