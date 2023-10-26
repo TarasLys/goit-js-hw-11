@@ -1,7 +1,5 @@
 import axios from "axios";
 import Notiflix from 'notiflix';
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
 
 axios.defaults.headers.common["x-api-key"] = "40175066-fc06551b58f265feccdc9509e";
 axios.defaults.baseURL = "https://pixabay.com/api/"

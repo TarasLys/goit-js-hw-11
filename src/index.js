@@ -1,6 +1,5 @@
 import { fetchImages } from './cat-api.js';
 import Notiflix from 'notiflix';
-//import SlimSelect from 'slim-select'
 
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
