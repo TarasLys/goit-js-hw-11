@@ -1,23 +1,42 @@
+import axios from "axios";
+import Notiflix from 'notiflix';
+
+const API_KEY = '40175066-fc06551b58f265feccdc9509e';
+const BASE_URL = 'https://pixabay.com/api/';
+
+const api = axios.create({
+  baseURL: BASE_URL,
+  params: {
+    key: API_KEY,
+  },
+});
+
 export async function fetchImages(query, page = 1) {
-  const response = await fetch(`https://pixabay.com/api/?key=40175066-fc06551b58f265feccdc9509e&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}`);
-  
+  try {
+    const response = await api.get('', {
+      params: {
+        q: query,
+        image_type: 'photo',
+        orientation: 'horizontal',
+        per_page: 40,
+        safesearch: true,
+        page: page,
+      },
+    });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const json = response.data;
+
+    if (json.hits.length === 0) {
+      Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+      return;
+    }
+
+    let images = json.hits
+    let total = json.totalHits
+    return { images, total };
+    
+  } catch (error) {
+    throw new Error(`HTTP error! status: ${error.response.status}`);
   }
-const json = await response.json();
-  
-  if (json.hits.length === 0) {
-    Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-    return;
-  }
-  let images = json.hits
-  let total = json.totalHits
-  return { images, total  };
 }
-
-
-
-
-
 

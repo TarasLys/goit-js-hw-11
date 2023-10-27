@@ -10,14 +10,22 @@ const input = form.elements.searchQuery;
 const gallery = document.querySelector('.gallery');
 const loadMore = document.querySelector(".js-load")
 const total = document.querySelector(".total")
-let currentPage = 1;
+
+  let currentPage = 1;
+  let lightbox = new SimpleLightbox('.photo-card a', {
+    captions: true,
+    captionDelay: 250,
+    captionSelector: 'img',
+    captionType: 'attr',
+    captionsData: 'alt'
+  });
 
 loadMore.style.display = 'none';
 
 function createCard(images) {
 
   const markup = images.map((image) => `<div class="photo-card">
-<a href="${image.largeImageURL}" class="lightbox">
+  <a href="${image.largeImageURL}" class="lightbox">
 
   <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" width = "350px"/>
   <div class="info">
@@ -33,26 +41,15 @@ function createCard(images) {
     <p class="info-item">
       <b>Downloads</b>${image.downloads}
     </p>
-  </div></div>`);
-  gallery.insertAdjacentHTML("beforeend", markup.join(""));  
-
+  </div></div>`).join("");
+  gallery.insertAdjacentHTML("beforeend", markup);  
+  lightbox.refresh()
  
-  new SimpleLightbox('.photo-card a', {
-    captions: true,
-    captionDelay: 250,
-    captionSelector: 'img',
-    captionType: 'attr',
-    captionsData: 'alt'
-  });
-
-if (images.length > 20) {
+if (images.length > 40 || images.length < 40) {
     loadMore.style.display = 'none';
   } else {
     loadMore.style.display = 'block';
   }
-
-
-
 }
 
 loadMore.addEventListener("click", onLoad)
