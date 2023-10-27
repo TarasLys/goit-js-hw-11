@@ -1,10 +1,3 @@
-import axios from "axios";
-import Notiflix from 'notiflix';
-
-axios.defaults.headers.common["x-api-key"] = "40175066-fc06551b58f265feccdc9509e";
-axios.defaults.baseURL = "https://pixabay.com/api/"
-
-
 export async function fetchImages(query, page = 1) {
   const response = await fetch(`https://pixabay.com/api/?key=40175066-fc06551b58f265feccdc9509e&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}`);
   
